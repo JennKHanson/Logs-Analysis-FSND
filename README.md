@@ -22,7 +22,7 @@ The project is a reporting tool that uses information from a database containing
 ## Getting Started
 
 ### Prerequisites
-Linux-based virtual machine (VM)
+VirtualBox and Vagrant to create a Linux-based virtual machine (VM)
 
 PostgreSQL
 
@@ -30,8 +30,8 @@ Psycopg
 
 
 ### How to Run the Project
-1. Make sure you have installed a Linux-based virtual machine (VM), PostgreSQL, and Psycopg
-2. In the command line cd into the vagrant file
+1. Make sure you have installed VirtualBox and Vagrant (to launch a Linux-based virtual machine (VM)); PostgreSQL; and Psycopg
+2. In the command line `cd` into the `vagrant` file
 3. In the command line type `vagrant up` in order to bring the VM online
 4. In the command line type `vagrant ssh` in order to log into the VM
 5. Download the data [here](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
@@ -44,15 +44,15 @@ Psycopg
 ### Views
 I used two views to answer the query, "The days more than 1% of requests led to errors." 
 
-CREATE view requests as 
-    SELECT date(time), 
-    count(*) as dailyrequests, 
-    count(case when status != '200 OK' THEN 1 end) as dailyerrors 
-    FROM log 
-    GROUP by date
+```CREATE view serverrequests as
+SELECT date(time),
+count(*) as dailyrequests,
+count(case when status != '200 OK' THEN 1 end) as dailyerrors
+FROM log
+GROUP by date```
 
-CREATE view errorpercent as 
-    SELECT date, ((dailyerrors/dailyrequests::decimal) *100) as percent 
-    FROM requests
+```CREATE view errorpct as
+SELECT date, ((dailyerrors/dailyrequests::decimal) *100) as percent
+FROM serverrequests```
 
 
